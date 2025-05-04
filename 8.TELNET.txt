@@ -1,0 +1,24 @@
+# =======================
+# Experiment 8: Telnet
+# =======================
+
+# Step 1: Install Telnet Server and xinetd
+sudo apt-get install telnetd
+sudo apt-get install xinetd
+
+# Step 2: Restart xinetd service
+sudo systemctl restart xinetd
+
+# Step 3: Check if telnetd is running
+ps aux | grep telnetd
+
+# Step 4: Check your IP address
+ip a
+
+# Note: Find the IP address of interface ens33 or enp0s3
+# Example: inet 192.168.29.26/24
+
+# Step 5: Connect using Telnet from another machine or terminal
+telnet <ip-address>
+# Example:
+# telnet 192.168.29.26
