@@ -1,0 +1,39 @@
+# =======================
+# Linux Networking Tools and Diagnostics
+# =======================
+
+# View network interfaces
+ifconfig
+
+# Modern alternative to ifconfig
+ip a
+
+# Test connectivity by pinging Google
+ping google.com
+
+# Show route taken to reach Google
+traceroute google.com
+
+# Show listening ports
+netstat -tuln
+
+# DNS lookup for google.com
+nslookup google.com
+
+# Detailed DNS info for google.com
+dig google.com
+
+# View the hostname of the machine
+hostname
+
+# Show current logged in user
+whoami
+
+# Show ARP (Address Resolution Protocol) table
+arp -a
+
+# 📦 Install tools if missing:
+sudo apt install net-tools dnsutils traceroute
+
+📦 Install tools if missing:
+sudo apt install net-tools dnsutils traceroute
