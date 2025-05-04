@@ -1,0 +1,49 @@
+# =======================
+# Experiment 7: File Transfer Protocol (FTP)
+# =======================
+
+# Step 1: Install FTP Client and Server
+sudo apt-get -y install lftp
+sudo apt update
+sudo apt install proftpd
+
+# Step 2: Check IP address (note it down, e.g., 192.168.29.26)
+ip addr
+
+# Step 3: Connect to FTP server
+lftp -u <your-username> <your-ip-address>
+# Example:
+# lftp -u user 192.168.29.26
+
+# Step 4: Basic FTP Commands
+pwd             # Show current FTP directory
+ls              # List files in current FTP directory
+
+# Step 5: Create text files locally on your system
+echo "Hello Ubuntu" > ubuntu.txt
+echo "Test file 1" > test.txt
+echo "Test file 2" > test2.txt
+echo "print('Hello from Python')" > test.py
+
+# Step 6: Upload files to FTP server
+put -a ubuntu.txt                          # Upload single file
+mput -a test.txt test2.txt                # Upload multiple files
+
+# Step 7: Download files from FTP server
+get -a test.py                             # Download single file
+mget -a test.txt test2.txt                # Download multiple files
+
+# Step 8: Directory operations on server
+mkdir testdir                              # Create directory
+ls                                         # Confirm it was created
+
+rmdir testdir                              # Delete directory
+ls                                         # Confirm it was deleted
+
+# Step 9: Delete files on server
+rm test2.txt                               # Delete single file
+mrm ubuntu.txt test.txt                   # Delete multiple files
+ls
+
+# Step 10: Exit FTP
+quit
