@@ -1,0 +1,174 @@
+# =======================
+# Experiment: Socket Programming in Java
+# =======================
+
+# Step 1: Create Directory Structure
+mkdir -p ~/networking-experiments/6_Socket_Programming_Java
+cd ~/networking-experiments/6_Socket_Programming_Java
+
+# 🚀 TCP Socket Programming
+
+# Step 2.1: Create TCP Server File
+nano TCPServer.java
+# Paste the following code:
+
+import java.io.*;
+import java.net.*;
+
+public class TCPServer {
+    public static void main(String[] args) throws Exception {
+        ServerSocket ss = new ServerSocket(6789);
+        System.out.println("Server is waiting for client...");
+        
+        Socket s = ss.accept();
+        System.out.println("Client connected.");
+        
+        BufferedReader inFromClient = new BufferedReader(new InputStreamReader(s.getInputStream()));
+        PrintWriter outToClient = new PrintWriter(s.getOutputStream(), true);
+        
+        String clientSentence = inFromClient.readLine();
+        System.out.println("Received from client: " + clientSentence);
+        
+        String response = clientSentence.toUpperCase();
+        outToClient.println("From Server: " + response);
+        
+        s.close();
+        ss.close();
+    }
+}
+
+# Save and exit: Ctrl+O, Enter, Ctrl+X
+
+# Step 2.2: Create TCP Client File
+nano TCPClient.java
+# Paste the following code:
+
+import java.io.*;
+import java.net.*;
+
+public class TCPClient {
+    public static void main(String[] args) throws Exception {
+        Socket s = new Socket("localhost", 6789);
+
+        BufferedReader inFromUser = new BufferedReader(new InputStreamReader(System.in));
+        BufferedReader inFromServer = new BufferedReader(new InputStreamReader(s.getInputStream()));
+        PrintWriter outToServer = new PrintWriter(s.getOutputStream(), true);
+
+        System.out.print("Enter message to send to server: ");
+        String sentence = inFromUser.readLine();
+
+        outToServer.println(sentence);
+        String response = inFromServer.readLine();
+
+        System.out.println("Response from server: " + response);
+
+        s.close();
+    }
+}
+
+# Save and exit: Ctrl+O, Enter, Ctrl+X
+
+# Step 2.3: Compile Both Files
+javac TCPServer.java TCPClient.java
+
+# Step 2.4: Run TCP Server in One Terminal
+# Open Terminal 1:
+java TCPServer
+# You'll see: Server is waiting for client...
+
+# Step 2.5: Run TCP Client in Another Terminal
+# Open Terminal 2:
+cd ~/networking-experiments/6_Socket_Programming_Java
+java TCPClient
+# It will ask for input like:
+# Enter message to send to server: hello
+# Response from server: From Server: HELLO
+# 🎉 TCP Communication Complete!
+
+# 🚀 UDP Socket Programming
+
+# Step 3.1: Create UDP Server File
+nano UDPServer.java
+# Paste the following code:
+
+import java.net.*;
+
+public class UDPServer {
+    public static void main(String[] args) throws Exception {
+        DatagramSocket serverSocket = new DatagramSocket(9876);
+        byte[] receiveData = new byte[1024];
+        byte[] sendData;
+
+        System.out.println("UDP Server is running...");
+
+        DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
+        serverSocket.receive(receivePacket);
+        String sentence = new String(receivePacket.getData(), 0, receivePacket.getLength());
+
+        System.out.println("Received from client: " + sentence);
+        String response = sentence.toUpperCase();
+
+        sendData = response.getBytes();
+        InetAddress IPAddress = receivePacket.getAddress();
+        int port = receivePacket.getPort();
+
+        DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, port);
+        serverSocket.send(sendPacket);
+
+        serverSocket.close();
+    }
+}
+
+# Save and exit: Ctrl+O, Enter, Ctrl+X
+
+# Step 3.2: Create UDP Client File
+nano UDPClient.java
+# Paste the following code:
+
+import java.net.*;
+import java.io.*;
+
+public class UDPClient {
+    public static void main(String[] args) throws Exception {
+        DatagramSocket clientSocket = new DatagramSocket();
+        InetAddress IPAddress = InetAddress.getByName("localhost");
+
+        BufferedReader userInput = new BufferedReader(new InputStreamReader(System.in));
+        byte[] sendData;
+        byte[] receiveData = new byte[1024];
+
+        System.out.print("Enter message to send to server: ");
+        String sentence = userInput.readLine();
+        sendData = sentence.getBytes();
+
+        DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, 9876);
+        clientSocket.send(sendPacket);
+
+        DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
+        clientSocket.receive(receivePacket);
+
+        String response = new String(receivePacket.getData(), 0, receivePacket.getLength());
+        System.out.println("Response from server: " + response);
+
+        clientSocket.close();
+    }
+}
+
+# Save and exit: Ctrl+O, Enter, Ctrl+X
+
+# Step 3.3: Compile Both UDP Files
+javac UDPServer.java UDPClient.java
+
+# Step 3.4: Run UDP Server in One Terminal
+# Open Terminal 1:
+java UDPServer
+# You'll see: UDP Server is running...
+
+# Step 3.5: Run UDP Client in Another Terminal
+# Open Terminal 2:
+cd ~/networking-experiments/6_Socket_Programming_Java
+java UDPClient
+# Enter:
+# Enter message to send to server: linux
+# Response from server: LINUX
+# 🎉 UDP Communication Complete!
