@@ -1,0 +1,12 @@
+3. Wireshark to Understand TCP/IP
+Steps:
+
+Open Wireshark.
+
+Start capture on your active network interface.
+
+In terminal or browser, open google.com.
+
+Stop capture after a few seconds.
+
+Use filter: tcp or ip.addr == your_IP
