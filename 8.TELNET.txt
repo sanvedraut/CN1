@@ -22,3 +22,9 @@ ip a
 telnet <ip-address>
 # Example:
 # telnet 192.168.29.26
+
+
+Note: Telnet won’t work properly. [Connection Refused]
+Verify following Inputs:
+sudo apt-get install inetutils-telnetd
+ls -l /usr/sbin/in.telnetd
